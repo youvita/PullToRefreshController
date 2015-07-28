@@ -74,16 +74,16 @@ public class PullToRefreshController: UIView {
     
     // MARK: - PullToRefreshHeader
     func addPllToRefreshHeader(typeImage:ImageType){
+        headerView = UIView(frame: CGRectMake(0, 0 - 45.0, UIScreen.mainScreen().bounds.width, 45.0))
+        headerView?.backgroundColor = UIColor.clearColor()
+        imagePostion = CGRectMake(headerView!.frame.width * 0.5 - 10.0, 15.0, 20.0, 20.0)
+        iconImage = UIImageView(image: UIImage(named: imageNames!.objectAtIndex(0) as! String))
+        
+        self.addSubview(headerView!)
         switch typeImage {
+           
             case .MultiImages :
                 /* Loading multi images with animation */
-                headerView = UIView(frame: CGRectMake(0, 0 - 45.0, UIScreen.mainScreen().bounds.width, 45.0))
-                headerView?.backgroundColor = UIColor.clearColor()
-                iconImage = UIImageView(image: UIImage(named: imageNames!.objectAtIndex(0) as! String))
-                imagePostion = CGRectMake(headerView!.frame.width * 0.5 - 10.0, 15.0, 20.0, 20.0)
-                
-                self.addSubview(headerView!)
-                
                 var images = NSMutableArray()
                 for var i = 0 ; i<self.imageNames?.count ; i++ {
                     images.addObject(UIImage(named: self.imageNames!.objectAtIndex(i) as! String)!)
@@ -92,15 +92,13 @@ public class PullToRefreshController: UIView {
                 self.iconImage?.frame = imagePostion!
                 self.iconImage?.animationImages = images as [AnyObject]
                 self.iconImage?.animationDuration = 1.0
-                
-                /* add headerView to view */
                 self.headerView?.addSubview(iconImage!)
                 isDefault = false
             
             default :
                 /* Loading single image animation */
                 /* kind of image icon refresh */
-                iconImage = UIImageView(image: UIImage(named: imageNames?.objectAtIndex(0) as! String))
+            
                 rotateControl = RotationController(view: headerView!,
                     image: iconImage!,
                     frame: imagePostion!,

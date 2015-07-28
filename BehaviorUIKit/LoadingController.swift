@@ -33,7 +33,7 @@ class LoadingController: UIView {
                
             case LoadingType.Animation :
                 /* Using images load with animation array */
-                var lodingImageView = UIImageView(frame: CGRectMake((loadView.bounds.width/2) - 12,(loadView.bounds.height/2)-13.5 - 44, 24, 27))
+                var lodingImageView = UIImageView(frame: CGRectMake((loadView.bounds.width/2) - 10,(loadView.bounds.height/2)-10 - 44, 20.0, 20.0))
                 lodingImageView.image        = UIImage(named: "")
                 var animatedImageView = UIImageView(frame: CGRectMake(0, 0, 24, 27))
                 var imageNames = ["load_01.png","load_02.png","load_03.png","load_04.png","load_05.png","load_06.png"]

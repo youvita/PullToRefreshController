@@ -32,14 +32,22 @@ class ViewController: UIViewController,UITableViewDataSource,UITableViewDelegate
 //        var object = PullToRefreshController()
 //        object.delegate = self
         
-//        /* Calling Loading */
-//        LoadingController.loadingView(self.view,loadType: LoadingType.Rotation)
-//        let delay = 3.0 * Double(NSEC_PER_SEC)
-//        let time  = dispatch_time(DISPATCH_TIME_NOW, Int64(delay))
-//        dispatch_after(time, dispatch_get_main_queue()){
-//            LoadingController.removeLoadingView(self.view)
-//        }
+        #if _DEBUG_
+            println("debug")
+        #endif
         
+        /* Calling Loading */
+        LoadingController.loadingView(self.view,loadType: LoadingType.Animation)
+        let delay = 3.0 * Double(NSEC_PER_SEC)
+        let time  = dispatch_time(DISPATCH_TIME_NOW, Int64(delay))
+        dispatch_after(time, dispatch_get_main_queue()){
+            LoadingController.removeLoadingView(self.view)
+        }
+        
+//        pullToRefresh = PullToRefreshController.attactToTableView(self.tableView,
+//            imagesArray: ["loading.png"],
+//            imageType: ImageType.SingleImage)
+
         pullToRefresh = PullToRefreshController.attactToTableView(self.tableView,
             imagesArray: ["load_01.png","load_02.png","load_03.png","load_04.png","load_05.png","load_06.png"],
             imageType: ImageType.MultiImages)
@@ -47,7 +55,7 @@ class ViewController: UIViewController,UITableViewDataSource,UITableViewDelegate
         /* Calling push to refresh handle event */
         pullToRefresh!.refreshHandle(usingBlock: { () -> Void in
             // reques here
-            let delay = 5.0 * Double(NSEC_PER_SEC)
+            let delay = 3.0 * Double(NSEC_PER_SEC)
             let time  = dispatch_time(DISPATCH_TIME_NOW, Int64(delay))
             dispatch_after(time, dispatch_get_main_queue()){
                 self.addItems()
