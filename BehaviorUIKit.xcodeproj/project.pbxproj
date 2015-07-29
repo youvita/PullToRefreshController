@@ -15,6 +15,7 @@
 		3E2623DA1B590F2800E8A4C4 /* load_06.png in Resources */ = {isa = PBXBuildFile; fileRef = 3E2623D41B590F2800E8A4C4 /* load_06.png */; };
 		3EA9CA851B5CD0160035A609 /* loading.png in Resources */ = {isa = PBXBuildFile; fileRef = 3EA9CA841B5CD0160035A609 /* loading.png */; };
 		3EA9CA871B5CD7740035A609 /* LoadingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EA9CA861B5CD7740035A609 /* LoadingController.swift */; };
+		3EAB56C91B68B1E5002F105D /* EffectButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EAB56C81B68B1E5002F105D /* EffectButton.swift */; };
 		3EC611401B54EC520084C403 /* MenuTranform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC6113F1B54EC520084C403 /* MenuTranform.swift */; };
 		3EC611421B5507AC0084C403 /* ViewComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC611411B5507AC0084C403 /* ViewComponent.swift */; };
 		3ECA5FF61B58BBB9009B260B /* PullToRefreshController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ECA5FF51B58BBB9009B260B /* PullToRefreshController.swift */; };
@@ -47,6 +48,7 @@
 		3E2623D41B590F2800E8A4C4 /* load_06.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = load_06.png; sourceTree = "<group>"; };
 		3EA9CA841B5CD0160035A609 /* loading.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = loading.png; sourceTree = "<group>"; };
 		3EA9CA861B5CD7740035A609 /* LoadingController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoadingController.swift; sourceTree = "<group>"; };
+		3EAB56C81B68B1E5002F105D /* EffectButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EffectButton.swift; sourceTree = "<group>"; };
 		3EC6113F1B54EC520084C403 /* MenuTranform.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuTranform.swift; sourceTree = "<group>"; };
 		3EC611411B5507AC0084C403 /* ViewComponent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewComponent.swift; sourceTree = "<group>"; };
 		3ECA5FF51B58BBB9009B260B /* PullToRefreshController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PullToRefreshController.swift; sourceTree = "<group>"; };
@@ -126,6 +128,7 @@
 				3EDA246C1B57403F009CCD25 /* RotationController.swift */,
 				3ECA5FF51B58BBB9009B260B /* PullToRefreshController.swift */,
 				3EA9CA861B5CD7740035A609 /* LoadingController.swift */,
+				3EAB56C81B68B1E5002F105D /* EffectButton.swift */,
 				3ECFCE2F1B4F7C7700A2C12E /* Main.storyboard */,
 				3ECFCE321B4F7C7700A2C12E /* Images.xcassets */,
 				3ECFCE341B4F7C7700A2C12E /* LaunchScreen.xib */,
@@ -273,6 +276,7 @@
 				3ECFCE2C1B4F7C7700A2C12E /* AppDelegate.swift in Sources */,
 				3EC611401B54EC520084C403 /* MenuTranform.swift in Sources */,
 				3EDA246D1B57403F009CCD25 /* RotationController.swift in Sources */,
+				3EAB56C91B68B1E5002F105D /* EffectButton.swift in Sources */,
 				3ECA5FF61B58BBB9009B260B /* PullToRefreshController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

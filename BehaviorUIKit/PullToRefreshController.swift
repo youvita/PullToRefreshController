@@ -186,7 +186,10 @@ public class PullToRefreshController: UIView {
         UIView.animateWithDuration(0.3, animations: {
             self.scrollView!.contentInset = UIEdgeInsetsMake(REFRESH_HEADER_HEIGHT, 0, 0, 0)
         })
-        self.refresh!()
+        
+        if self.refresh != nil{
+            self.refresh!()
+        }
     }
     
     func stopLoading(){
