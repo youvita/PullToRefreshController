@@ -113,9 +113,9 @@ class EffectButton: UIView {
                 self.animator?.addBehavior(self.pushBehavior)
                 self.animator?.addBehavior(self.collisionBehavior)
                 self.animator?.addBehavior(self.itemBehavior)
-                UIView.animateWithDuration(1.0, animations: { () -> Void in
-                    self.buttonView!.alpha = 0.0
-                })
+//                UIView.animateWithDuration(1.0, animations: { () -> Void in
+//                    self.buttonView!.alpha = 0.0
+//                })
             }else{
                 UIView.animateWithDuration(0.5, animations: { () -> Void in
                     self.buttonView!.alpha = 0.0
@@ -126,9 +126,9 @@ class EffectButton: UIView {
             // Up
             if self.styleView == Styles.Push  {
                 self.pushBehavior?.setAngle(CGFloat(-M_PI_2), magnitude: 2.0)
-                UIView.animateWithDuration(1.5, animations: { () -> Void in
-                    self.buttonView!.alpha = 1.0
-                })
+//                UIView.animateWithDuration(1.5, animations: { () -> Void in
+//                    self.buttonView!.alpha = 1.0
+//                })
             }else{
                 UIView.animateWithDuration(0.5, animations: { () -> Void in
                     self.buttonView!.alpha = 1.0

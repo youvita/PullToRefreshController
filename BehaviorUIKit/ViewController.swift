@@ -70,15 +70,15 @@ class ViewController: UIViewController,UITableViewDataSource,UITableViewDelegate
             imagesArray: ["load_01.png","load_02.png","load_03.png","load_04.png","load_05.png","load_06.png"],
             imageType: ImageType.MultiImages)
         
-//        /* Calling push to refresh handle event */
-//        pullToRefresh!.refreshHandle(usingBlock: { () -> Void in
-//            // reques here
-//            let delay = 3.0 * Double(NSEC_PER_SEC)
-//            let time  = dispatch_time(DISPATCH_TIME_NOW, Int64(delay))
-//            dispatch_after(time, dispatch_get_main_queue()){
-//                self.addItems()
-//            }
-//        })
+        /* Calling push to refresh handle event */
+        pullToRefresh!.refreshHandle(usingBlock: { () -> Void in
+            // reques here
+            let delay = 3.0 * Double(NSEC_PER_SEC)
+            let time  = dispatch_time(DISPATCH_TIME_NOW, Int64(delay))
+            dispatch_after(time, dispatch_get_main_queue()){
+                self.addItems()
+            }
+        })
     
     }
     
