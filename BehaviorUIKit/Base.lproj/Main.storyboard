@@ -60,7 +60,13 @@
                         </constraints>
                     </view>
                     <extendedEdge key="edgesForExtendedLayout" bottom="YES"/>
-                    <navigationItem key="navigationItem" id="uig-cG-Hnt"/>
+                    <navigationItem key="navigationItem" id="uig-cG-Hnt">
+                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="vVH-uL-xvR">
+                            <connections>
+                                <action selector="onAddItemPress:" destination="HYd-NZ-WB1" id="4ac-P6-FAe"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                     <connections>
                         <outlet property="button" destination="NKN-IM-mXL" id="6Kv-Lk-cP1"/>

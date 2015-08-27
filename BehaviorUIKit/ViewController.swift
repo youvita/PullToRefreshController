@@ -27,6 +27,10 @@ class ViewController: UIViewController,UITableViewDataSource,UITableViewDelegate
     
     @IBOutlet weak var button: UIButton!
     
+    @IBAction func onAddItemPress(sender: AnyObject) {
+        println("\(slideCollection!.getAllItemsSelected())")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         

@@ -46,6 +46,10 @@ class SlideCollectionView: UIView ,UICollectionViewDelegate,UICollectionViewData
         self.autoScrollToLastItemIndex()
     }
     
+    func getAllItemsSelected()-> NSArray {
+        return urlImages
+    }
+    
     func removeItemSelected(sender:UIButton){
         urlImages.removeObjectAtIndex(sender.tag)
         self.collectionView?.reloadData()
