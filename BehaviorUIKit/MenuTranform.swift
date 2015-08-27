@@ -24,7 +24,6 @@ class MenuTranform: NSObject {
     var sizeView          : UIView?
     var frameView         : CGRect?
     var tapHandler        : ((Bool)->Void)?
-    var menuView          : ViewComponent?
     var isModify          : Bool = false{
         didSet{
             if isModify {
@@ -34,24 +33,22 @@ class MenuTranform: NSObject {
                 UIView.animateWithDuration(0.2 , animations: { () -> Void in
                     let scaleTransform = CGAffineTransformMakeScale(4.9, 4.9)
                     self.mainView!.transform = scaleTransform
-                    self.mainView?.center = self.sizeView!.center
+                    self.mainView?.frame.origin = CGPointMake(UIScreen.mainScreen().bounds.width / 2 - self.mainView!.bounds.width, UIScreen.mainScreen().bounds.height / 2 - self.mainView!.bounds.height)
                     self.mainView?.layer.cornerRadius = 2.0
-                    self.mainView?.alpha = 1.0
+                    self.mainView?.alpha = 0.8
                     
                 })
                 
-                menuView = ViewComponent(frame: frameView!)
-                menuView?.backgroundColor = UIColor.blueColor()
-                self.mainView?.addSubview(menuView!)
                 self.panGesture?.enabled = false
                 
             }else{
                 /* normal size */
                 UIView.animateWithDuration(0.1, animations: { () -> Void in
-                    let scaleTransform = CGAffineTransformMakeScale(1.0, 1.0)
+                    let scaleTransform = CGAffineTransformIdentity
                     self.mainView!.transform = scaleTransform
                     self.mainView?.frame.origin = self.oldPoint!
                     self.mainView?.layer.cornerRadius = 10.0
+                    self.mainView?.alpha = 1.0
                 })
             
                 self.panGesture?.enabled = true

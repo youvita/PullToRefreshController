@@ -13,14 +13,47 @@ class ViewController: UIViewController,UITableViewDataSource,UITableViewDelegate
     var menuTranform    : MenuTranform?
     var pullToRefresh   : PullToRefreshController?
     var effectButton    : EffectButton?
+    var slideImage      : SlideImage?
+    var slideCollection : SlideCollectionView?
+    var codeButton      : UIButton?
+    var cellArray       : NSMutableArray?
+    var arrImages       : NSArray?
+    var arrImagesUrl    : NSArray?
     
+    
+    @IBOutlet weak var onTopTableView: NSLayoutConstraint!
+    @IBOutlet weak var viewCollection: UIView!
     @IBOutlet var tableView: UITableView!
     
     @IBOutlet weak var button: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        arrImages = [
+            "http://www.planwallpaper.com/static/images/background-wallpapers-32.jpg",
+            "http://www.planwallpaper.com/static/images/824183-green-wallpaper.jpg"]
+        
         arrItems = NSMutableArray()
+        for i in 1...3 {
+            arrItems?.addObject("Item\(i)")
+        }
+        #if _DEBUG_
+            println("debug")
+        #endif
+        
+        ////////////////////////////////////////////////////////////////////////////////////////
+        /* Using Slide Image Collection View */
+        onTopTableView.constant = 0 // to hide collection view
+        arrImagesUrl = ["http://www.planwallpaper.com/static/images/fresh-green-background.jpg",
+            "http://www.planwallpaper.com/static/images/background-wallpapers-32.jpg",
+            ""]
+
+        slideCollection = SlideCollectionView(tagetView: self.viewCollection)
+        slideCollection?.onHideCollectionView(usingBlock: { () -> Void in
+            self.onTopTableView.constant = 0
+        })
+        ////////////////////////////////////////////////////////////////////////////////////////
         
 //        menuTranform = MenuTranform(size: self.view, frame: CGRectMake(2, self.view.frame.height / 2, 60, 60))
 //        menuTranform?.enable()
@@ -34,25 +67,39 @@ class ViewController: UIViewController,UITableViewDataSource,UITableViewDelegate
 //        var object = PullToRefreshController()
 //        object.delegate = self
         
-        for i in 1...20 {
-            arrItems?.addObject("Item\(i)")
-        }
-        #if _DEBUG_
-            println("debug")
-        #endif
+        var heardView = UIView(frame:CGRectMake(0, 0, self.view.frame.size.width, 161))
+        self.tableView.tableHeaderView = heardView
         
-//        var button = UIButton(frame: CGRectMake(UIScreen.mainScreen().bounds.width - 40.0 - 20.0, UIScreen.mainScreen().bounds.height - 40.0 - 100, 40.0, 45.0))
-//        button.setTitle("TOP", forState: UIControlState.Normal)
-//        button.backgroundColor = UIColor.brownColor()
+        var lindeView = UIView(frame: CGRectMake(0, heardView.frame.height, self.view.frame.size.width, 1))
+        lindeView.backgroundColor = UIColor.grayColor()
+        heardView.addSubview(lindeView)
+        
+        var scrollView = UIScrollView(frame: CGRectMake(self.view.frame.origin.x + 10, 10, self.view.frame.size.width - 20, 150))
+        slideImage = SlideImage.attactToScrollView(scrollView,images: arrImages!,
+            tagetView: heardView,
+            backgroudScrollView: UIColor.grayColor(),
+            merging: true,
+            hidePageFooter: false)
 
        
-        effectButton = EffectButton.attactToTableView(self.tableView, buttonView: self.button,tagetView: self.view,styleView: Styles.Push)
-        self.view.addSubview(effectButton!)
-//        effectButton?.onClickHandle(UsingBlock: {() -> Void in
-//            println("Yes")
-//        })
+        
+        // Using button code builder
+        codeButton = UIButton(frame: CGRectMake(UIScreen.mainScreen().bounds.width - 40.0 - 20.0, UIScreen.mainScreen().bounds.height - 40.0 - 100, 40.0, 45.0))
+        codeButton?.setTitle("TOP", forState: UIControlState.Normal)
+        codeButton?.layer.cornerRadius = 10.0
+        codeButton?.backgroundColor = UIColor.brownColor()
 
-        self.button.addTarget(self, action: "Clicked", forControlEvents: UIControlEvents.TouchUpInside)
+        // Using button design builder
+        self.button.layer.cornerRadius = 10.0
+//        self.button.hidden = true
+//        self.button.addTarget(self, action: "Clicked", forControlEvents: UIControlEvents.TouchUpInside)
+        effectButton = EffectButton.attactToTableView(self.tableView, buttonView: self.button,tagetView: self.view,styleView: Styles.Zoom)
+        self.view.addSubview(effectButton!)
+        effectButton?.onClickHandle(UsingBlock: {() -> Void in
+            println("Yes")
+            self.tableView.contentOffset = CGPointZero
+//            self.codeButton!.hidden = true
+        })
         
         /* Calling Loading */
 //        LoadingController.loadingView(self.view,loadType: LoadingType.Animation)
@@ -63,7 +110,7 @@ class ViewController: UIViewController,UITableViewDataSource,UITableViewDelegate
 //        }
         
 //        pullToRefresh = PullToRefreshController.attactToTableView(self.tableView,
-//            imagesArray: ["loading.png"],
+//            imagesArray: ["icon_refresh.png"],
 //            imageType: ImageType.SingleImage)
 
         pullToRefresh = PullToRefreshController.attactToTableView(self.tableView,
@@ -82,30 +129,32 @@ class ViewController: UIViewController,UITableViewDataSource,UITableViewDelegate
     
     }
     
-    func Clicked(){
-        println("Yes")
-    }
+//    func Clicked(){
+//        println("Yes")
+//    }
     
     //MARK: - ScrollViewDelegate
     func scrollViewDidScroll(scrollView: UIScrollView) {
         pullToRefresh?.pullScrollViewDidScroll()
-        effectButton?.ScrollViewDidScroll()
+        effectButton?.scrollViewDidScroll()
     }
     
     func scrollViewDidEndDragging(scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         pullToRefresh?.pullScrollViewDidEndDragging()
-        effectButton?.ScrollViewDidEndDragging()
+        effectButton?.scrollViewDidEndDragging()
     }
     
     func scrollViewWillBeginDragging(scrollView: UIScrollView) {
         pullToRefresh?.pullScrollViewWillBeginDragging()
-        effectButton?.ScrollViewWillBeginDragging()
+        effectButton?.scrollViewWillBeginDragging()
+        codeButton?.hidden = false
     }
+    
     
     //MARK: - TableViewDelegate
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        var cell = tableView.dequeueReusableCellWithIdentifier("cell") as! UITableViewCell
         
+        var cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as! UITableViewCell
         cell.textLabel?.text = arrItems!.objectAtIndex(indexPath.row) as? String
         
         return cell
@@ -114,7 +163,11 @@ class ViewController: UIViewController,UITableViewDataSource,UITableViewDelegate
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return arrItems!.count
     }
-
+    
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        slideCollection!.addItemSelected(arrImagesUrl!.objectAtIndex(indexPath.row) as! NSString)
+        onTopTableView.constant = 59
+    }
     
     func addItems(){
         arrItems?.addObject("Pull To Refresh")

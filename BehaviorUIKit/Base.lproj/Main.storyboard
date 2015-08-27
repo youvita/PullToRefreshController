@@ -2,7 +2,6 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7702" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="HHH-9P-Bgc">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7701"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
         <!--View Controller-->
@@ -17,8 +16,12 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="504"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="sOZ-jD-9F2">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="n3e-rd-gjw">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="60"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </view>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="sOZ-jD-9F2">
+                                <rect key="frame" x="0.0" y="59" width="320" height="508"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cell" id="h8p-8E-W2F">
@@ -37,15 +40,23 @@
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NKN-IM-mXL">
                                 <rect key="frame" x="109" y="440" width="103" height="44"/>
                                 <color key="backgroundColor" red="0.41176470590000003" green="0.3921568627" blue="0.82352941180000006" alpha="1" colorSpace="calibratedRGB"/>
-                                <state key="normal" title="Button"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="CRM-nY-GAk"/>
+                                    <constraint firstAttribute="width" constant="103" id="K54-kn-kFh"/>
+                                </constraints>
+                                <state key="normal" title="Button">
+                                    <color key="titleColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </state>
                             </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstAttribute="trailingMargin" secondItem="NKN-IM-mXL" secondAttribute="trailing" constant="92" id="Qmj-Fe-sxy"/>
-                            <constraint firstItem="NKN-IM-mXL" firstAttribute="leading" secondItem="R7y-kk-epd" secondAttribute="leadingMargin" constant="93" id="uuW-rG-HKL"/>
-                            <constraint firstItem="NKN-IM-mXL" firstAttribute="top" secondItem="DdJ-GD-UiE" secondAttribute="bottom" constant="440" id="zJG-nP-xsu"/>
-                            <constraint firstItem="Khd-qP-N93" firstAttribute="top" secondItem="NKN-IM-mXL" secondAttribute="bottom" constant="20" id="zV9-zs-Vws"/>
+                            <constraint firstItem="sOZ-jD-9F2" firstAttribute="top" secondItem="DdJ-GD-UiE" secondAttribute="bottom" constant="59" id="1rp-xb-r2B"/>
+                            <constraint firstAttribute="centerX" secondItem="NKN-IM-mXL" secondAttribute="centerX" constant="-0.5" id="7Ln-Gg-Cy8"/>
+                            <constraint firstAttribute="width" secondItem="sOZ-jD-9F2" secondAttribute="width" id="Adg-Nk-0Sb"/>
+                            <constraint firstItem="sOZ-jD-9F2" firstAttribute="leading" secondItem="R7y-kk-epd" secondAttribute="leading" id="OHv-Hn-2hV"/>
+                            <constraint firstAttribute="height" secondItem="sOZ-jD-9F2" secondAttribute="height" constant="-4" id="UDo-Kn-t9K"/>
+                            <constraint firstItem="Khd-qP-N93" firstAttribute="top" secondItem="NKN-IM-mXL" secondAttribute="bottom" constant="20" id="v9m-Bz-wjV"/>
                         </constraints>
                     </view>
                     <extendedEdge key="edgesForExtendedLayout" bottom="YES"/>
@@ -53,7 +64,9 @@
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                     <connections>
                         <outlet property="button" destination="NKN-IM-mXL" id="6Kv-Lk-cP1"/>
+                        <outlet property="onTopTableView" destination="1rp-xb-r2B" id="xqe-1x-Dal"/>
                         <outlet property="tableView" destination="sOZ-jD-9F2" id="9Ib-s2-hS2"/>
+                        <outlet property="viewCollection" destination="n3e-rd-gjw" id="Q93-Tk-0vH"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="eeA-ga-YPc" userLabel="First Responder" sceneMemberID="firstResponder"/>

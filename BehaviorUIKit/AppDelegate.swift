@@ -12,10 +12,19 @@ import UIKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-
+    var menuTranform    : MenuTranform?
+    var navigate : UINavigationController?
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
+//        window = UIWindow(frame: UIScreen.mainScreen().bounds)
+////        menuTranform = MenuTranform(size: window!, frame: CGRectMake(2, UIScreen.mainScreen().bounds.height / 2, 60, 60))
+////        menuTranform?.enable()
+//        var viewRoot = ViewController()
+//        navigate?.pushViewController(viewRoot, animated: true)
+//        self.window!.rootViewController = navigate
+//        self.window?.makeKeyAndVisible()
+
         return true
     }
 

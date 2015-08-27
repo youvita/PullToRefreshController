@@ -11,6 +11,8 @@ import UIKit
 public enum Styles {
     case Fade
     case Push
+    case Zoom
+    case Rotae
 }
 
 class EffectButton: UIView {
@@ -22,9 +24,11 @@ class EffectButton: UIView {
     var itemBehavior        : UIDynamicItemBehavior?
     var animator            : UIDynamicAnimator?
     var isFinish            : Bool = false
+    var isHited             : Bool = false
     var currentPoint        : CGFloat?
     var styleView           : Styles?
     var onClicking          : (()->Void)?
+  
     
     init(frame: CGRect,scrollView:UIScrollView,buttonView:UIButton,tagetView:UIView,styleView:Styles) {
     super.init(frame: frame)
@@ -70,19 +74,23 @@ class EffectButton: UIView {
         self.buttonView?.addTarget(self, action: "onClicked", forControlEvents: UIControlEvents.TouchUpInside)
         
         if self.styleView == Styles.Push {
-            /* set animate to view */
-            self.animator = UIDynamicAnimator(referenceView:self.tagetView!)
-            pushBehavior = UIPushBehavior(items: [self.buttonView!], mode: UIPushBehaviorMode.Continuous)
-            println("\(heightConstrain())")
-            /* set collision for icon image */
-            self.collisionBehavior = UICollisionBehavior(items: [self.buttonView!])
-            self.collisionBehavior?.setTranslatesReferenceBoundsIntoBoundaryWithInsets(UIEdgeInsetsMake(self.buttonView!.frame.origin.y, 0,-heightConstrain(), 0))
-            
-            /* set icon image boune */
-            self.itemBehavior = UIDynamicItemBehavior(items: [self.buttonView!])
-            self.itemBehavior?.elasticity = 0.0
-            self.itemBehavior?.allowsRotation = false
+            self.addBehaviorAnimator()
         }
+    }
+    
+    func addBehaviorAnimator(){
+        /* set animate to view */
+        self.animator = UIDynamicAnimator(referenceView:self.tagetView!)
+        pushBehavior = UIPushBehavior(items: [self.buttonView!], mode: UIPushBehaviorMode.Continuous)
+        
+        /* set collision for icon image */
+        self.collisionBehavior = UICollisionBehavior(items: [self.buttonView!])
+        self.collisionBehavior?.setTranslatesReferenceBoundsIntoBoundaryWithInsets(UIEdgeInsetsMake(self.buttonView!.frame.origin.y, 0,-heightConstrain(), 0))
+        
+        /* set icon image boune */
+        self.itemBehavior = UIDynamicItemBehavior(items: [self.buttonView!])
+        self.itemBehavior?.elasticity = 0.0
+        self.itemBehavior?.allowsRotation = false
     }
     
     func heightConstrain()->CGFloat{
@@ -90,63 +98,93 @@ class EffectButton: UIView {
         return self.tagetView!.frame.height - height
     }
     
-    // MARK: -Closesure Method
+    // MARK: - Closesure Method
     func onClickHandle(UsingBlock block:(()->Void)!){
         self.onClicking = block
     }
     
-    // MARK: -Target Button
+    // MARK: - Target Button
     func onClicked(){
         if onClicking != nil {
            self.onClicking!()
         }
     }
     
-    // MARK: - ScrollViewDelegate
-    func ScrollViewDidScroll() {
+     // MARK: - ScrollViewDelegate
+    func scrollViewDidScroll() {
         if isFinish {return}
         
-        if self.scrollView?.contentOffset.y > self.currentPoint {
-            // Down
-            if self.styleView == Styles.Push {
-                self.pushBehavior?.setAngle(CGFloat(M_PI_2), magnitude: 1.0)
-                self.animator?.addBehavior(self.pushBehavior)
-                self.animator?.addBehavior(self.collisionBehavior)
-                self.animator?.addBehavior(self.itemBehavior)
-//                UIView.animateWithDuration(1.0, animations: { () -> Void in
-//                    self.buttonView!.alpha = 0.0
-//                })
-            }else{
-                UIView.animateWithDuration(0.5, animations: { () -> Void in
-                    self.buttonView!.alpha = 0.0
+        /* Checking when scroll hited bottom */
+        if self.scrollView!.contentOffset.y + self.scrollView!.frame.size.height > self.scrollView!.contentSize.height {
+            isHited = true // hited
+        }else{
+            isHited = false // not hited
+        }
+        
+        if self.scrollView?.contentOffset.y > self.currentPoint && self.scrollView?.contentOffset.y > 0.0 {
+            // Up for hide
+            if !isHited {
+                if self.styleView == Styles.Push {
+                    /* Push Event */
+                    self.pushBehavior?.setAngle(CGFloat(M_PI_2), magnitude: 2.0)
+                    self.animator?.addBehavior(self.pushBehavior)
+                    self.animator?.addBehavior(self.collisionBehavior)
+                    self.animator?.addBehavior(self.itemBehavior)
+                }else if self.styleView == Styles.Rotae {
+                    UIView.animateWithDuration(1 , animations: { () -> Void in
+                        self.buttonView?.transform = CGAffineTransformMakeRotation(CGFloat(M_PI))
+                        self.buttonView?.alpha = 0.0
+                    })
+                }
+                else if self.styleView == Styles.Zoom {
+                    /* Zoom Event */
+                        UIView.animateWithDuration(1 , animations: { () -> Void in
+                            self.buttonView?.transform = CGAffineTransformMakeScale(0.5,0.5)
+                            self.buttonView?.alpha = 0.0
+                        })
+                }else{
+                    /* Fade Event */
+                    UIView.animateWithDuration(0.5, animations: { () -> Void in
+                        self.buttonView!.alpha = 0.0
+                    })
+                }
+                
+                self.currentPoint = self.scrollView?.contentOffset.y
+            }
+        }else{
+            // Down for showing
+            if self.styleView == Styles.Push  {
+                /* Push Event */
+                self.pushBehavior?.setAngle(CGFloat(-M_PI_2), magnitude: 2.0)
+            }else if self.styleView == Styles.Rotae {
+                UIView.animateWithDuration(1, animations: { () -> Void in
+                    self.buttonView?.alpha = 1.0
+                    self.buttonView?.transform = CGAffineTransformIdentity
                 })
             }
-            self.currentPoint = self.scrollView?.contentOffset.y
-        }else{
-            // Up
-            if self.styleView == Styles.Push  {
-                self.pushBehavior?.setAngle(CGFloat(-M_PI_2), magnitude: 2.0)
-//                UIView.animateWithDuration(1.5, animations: { () -> Void in
-//                    self.buttonView!.alpha = 1.0
-//                })
+            else if self.styleView == Styles.Zoom {
+                /* Zoom Event */
+                    UIView.animateWithDuration(1 , animations: { () -> Void in
+                        self.buttonView?.alpha = 1.0
+                        self.buttonView?.transform = CGAffineTransformIdentity
+                    })
             }else{
+                /* Fade Event */
                 UIView.animateWithDuration(0.5, animations: { () -> Void in
                     self.buttonView!.alpha = 1.0
                 })
             }
+            
             self.currentPoint = self.scrollView?.contentOffset.y
         }
-        
     }
     
-    func ScrollViewWillBeginDragging() {
-        isFinish = false
-    }
-    
-    func ScrollViewDidEndDragging() {
+    func scrollViewDidEndDragging() {
         isFinish = true
     }
-
-
+    
+    func scrollViewWillBeginDragging() {
+        isFinish = false
+    }
 
 }
