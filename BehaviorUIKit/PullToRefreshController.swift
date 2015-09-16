@@ -11,11 +11,6 @@ import UIKit
 
 private let REFRESH_HEADER_HEIGHT : CGFloat = 52.0
 
-public enum ImageType {
-    case SingleImage // Single Image
-    case MultiImages // Multi Images
-}
-
 public class PullToRefreshController: UIView {
     var scrollView          : UIScrollView?
     var headerView          : UIView?
@@ -27,29 +22,27 @@ public class PullToRefreshController: UIView {
     var isDefault           : Bool      = false
     var valueImg            : CGFloat   = 20
     var indexImg            : Int       = 0
-    var typeImage           : ImageType?
-    var rotateControl       : RotationController?
     var gravityBehavior     : UIGravityBehavior?
     var collisionBehavior   : UICollisionBehavior?
     var itemBehavior        : UIDynamicItemBehavior?
     var animator            : UIDynamicAnimator?
     
-    init(frame: CGRect,scrollView:UIScrollView,imageArray:NSArray,imageType:ImageType) {
+    init(frame: CGRect,scrollView:UIScrollView,imageArray:NSArray) {
         super.init(frame: frame)
         self.scrollView = scrollView
         self.imageNames = imageArray
-        self.addPllToRefreshHeader(imageType)
+        self.addPllToRefreshHeader()
     }
 
     required public init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    class func attactToTableView(tableView:UITableView,imagesArray:NSArray,imageType:ImageType)->PullToRefreshController {
-        return self.attactToScrollView(tableView,imageArray: imagesArray,imageType: imageType)
+    class func attactToTableView(tableView:UITableView,imagesArray:NSArray)->PullToRefreshController {
+        return self.attactToScrollView(tableView,imageArray: imagesArray)
     }
     
-    class func attactToScrollView(scrollView:UIScrollView,imageArray:NSArray,imageType:ImageType)->PullToRefreshController{
+    class func attactToScrollView(scrollView:UIScrollView,imageArray:NSArray)->PullToRefreshController{
         var existingRefresh = self.findRefreshControlInScrollView(scrollView)
         if (existingRefresh != nil) {
             return existingRefresh!
@@ -57,7 +50,7 @@ public class PullToRefreshController: UIView {
         
         /* Initialized height to 0 to hide it */
         var refreshControl = PullToRefreshController(frame: CGRectMake(0.0, 0.0, scrollView.frame.size.width, 0.0)
-            , scrollView: scrollView,imageArray: imageArray,imageType:imageType)
+            , scrollView: scrollView,imageArray: imageArray)
         
         scrollView.addSubview(refreshControl)
         return refreshControl
@@ -73,52 +66,44 @@ public class PullToRefreshController: UIView {
     }
     
     // MARK: - PullToRefreshHeader
-    func addPllToRefreshHeader(typeImage:ImageType){
+    func addPllToRefreshHeader(){
         headerView = UIView(frame: CGRectMake(0, 0 - 45.0, UIScreen.mainScreen().bounds.width, 45.0))
         headerView?.backgroundColor = UIColor.clearColor()
         imagePostion = CGRectMake(headerView!.frame.width * 0.5 - 10.0, 15.0, 20.0, 20.0)
         iconImage = UIImageView(image: UIImage(named: imageNames!.objectAtIndex(0) as! String))
-        
+        self.iconImage?.frame = imagePostion!
         self.addSubview(headerView!)
-        switch typeImage {
-           
-            case .MultiImages :
-                /* Loading multi images with animation */
-                var images = NSMutableArray()
-                for var i = 0 ; i<self.imageNames?.count ; i++ {
-                    images.addObject(UIImage(named: self.imageNames!.objectAtIndex(i) as! String)!)
-                }
-                
-                self.iconImage?.frame = imagePostion!
-                self.iconImage?.animationImages = images as [AnyObject]
-                self.iconImage?.animationDuration = 1.0
-                self.headerView?.addSubview(iconImage!)
-                isDefault = false
-            
-            default :
-                /* Loading single image animation */
-                /* kind of image icon refresh */
-            
-                rotateControl = RotationController(view: headerView!,
-                    image: iconImage!,
-                    frame: imagePostion!,
-                    speed: 0.7)
-                rotateControl?.setup()
-                
-                /* set animate to view */
-                self.animator = UIDynamicAnimator(referenceView:headerView!)
-                self.gravityBehavior = UIGravityBehavior(items: [iconImage!])
-                
-                /* set collision for icon image */
-                self.collisionBehavior = UICollisionBehavior(items: [iconImage!])
-                self.collisionBehavior?.translatesReferenceBoundsIntoBoundary = true
-                
-                /* set icon image boune */
-                self.itemBehavior = UIDynamicItemBehavior(items: [iconImage!])
-                self.itemBehavior?.elasticity = 1.0
-                self.itemBehavior?.allowsRotation = false
-                isDefault = true
+        
+        if imageNames?.count > 1 {
+            /* Loading multi images with animation */
+            var images = NSMutableArray()
+            for var i = 0 ; i<self.imageNames?.count ; i++ {
+                images.addObject(UIImage(named: self.imageNames!.objectAtIndex(i) as! String)!)
             }
+            self.iconImage?.animationImages = images as [AnyObject]
+            self.iconImage?.animationDuration = 1.0
+            isDefault = false
+        }else{
+            /* Loading single image animation */
+            /* kind of image icon refresh */
+            iconImage?.frame = imagePostion!
+            /* set animate to view */
+            self.animator = UIDynamicAnimator(referenceView:headerView!)
+            self.gravityBehavior = UIGravityBehavior(items: [iconImage!])
+            
+            /* set collision for icon image */
+            self.collisionBehavior = UICollisionBehavior(items: [iconImage!])
+            self.collisionBehavior?.translatesReferenceBoundsIntoBoundary = true
+            
+            /* set icon image boune */
+            self.itemBehavior = UIDynamicItemBehavior(items: [iconImage!])
+            self.itemBehavior?.elasticity = 1.0
+            self.itemBehavior?.allowsRotation = false
+            isDefault = true
+
+        }
+        self.headerView?.addSubview(iconImage!)
+        
     }
     
     
@@ -171,8 +156,8 @@ public class PullToRefreshController: UIView {
         if self.scrollView!.contentOffset.y <= -REFRESH_HEADER_HEIGHT {
             self.startLoading()
             if isDefault {
-                self.rotateControl?.start() // start rotation icon image
-                self.rotateControl?.rotationImage?.frame = imagePostion!
+                iconImage?.frame = imagePostion!
+                iconImage?.layer.addAnimation(setRotationAnimation(1.0, point: iconImage!), forKey: "rotation")
                 self.animator?.removeAllBehaviors()
             }else{
                 self.iconImage?.startAnimating()
@@ -196,7 +181,7 @@ public class PullToRefreshController: UIView {
         isLoading = false
         self.scrollView!.contentInset = UIEdgeInsetsZero
         if isDefault {
-            self.rotateControl?.stop()
+            self.iconImage?.layer.removeAnimationForKey("rotation")
         }else{
             self.iconImage?.stopAnimating()
         }
@@ -212,6 +197,20 @@ public class PullToRefreshController: UIView {
         self.indexImg = 0
         self.valueImg = 20
     }
+    
+    func setRotationAnimation(time:CFTimeInterval,point:UIView)->CABasicAnimation{
+        /* Current Angle Of View */
+        let radians = atan2( point.transform.b, point.transform.a)
+        let degrees = radians * (180 / CGFloat(M_PI) )
+        
+        var animation = CABasicAnimation(keyPath: "transform.rotation")
+        animation.fromValue = degrees
+        animation.toValue = M_PI * 2.0
+        animation.duration = time
+        animation.repeatCount = HUGE
+        return animation
+    }
+
     
     
 }

@@ -10,8 +10,7 @@ import UIKit
 
 class SlideCollectionView: UIView ,UICollectionViewDelegate,UICollectionViewDataSource{
     var mainView    : UIView?
-    var urlImages   : NSMutableArray                = NSMutableArray()
-    var indexPathCollectionView : NSMutableArray    = NSMutableArray()
+    var urlImages   : NSMutableArray = NSMutableArray()
     var collectionView : UICollectionView?
     var handler : (()->Void)?
     

@@ -19,7 +19,7 @@ class ViewController: UIViewController,UITableViewDataSource,UITableViewDelegate
     var cellArray       : NSMutableArray?
     var arrImages       : NSArray?
     var arrImagesUrl    : NSArray?
-    
+
     
     @IBOutlet weak var onTopTableView: NSLayoutConstraint!
     @IBOutlet weak var viewCollection: UIView!
@@ -30,10 +30,12 @@ class ViewController: UIViewController,UITableViewDataSource,UITableViewDelegate
     @IBAction func onAddItemPress(sender: AnyObject) {
         println("\(slideCollection!.getAllItemsSelected())")
     }
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+                
         arrImages = [
             "http://www.planwallpaper.com/static/images/background-wallpapers-32.jpg",
             "http://www.planwallpaper.com/static/images/824183-green-wallpaper.jpg"]
@@ -59,33 +61,26 @@ class ViewController: UIViewController,UITableViewDataSource,UITableViewDelegate
         })
         ////////////////////////////////////////////////////////////////////////////////////////
         
-//        menuTranform = MenuTranform(size: self.view, frame: CGRectMake(2, self.view.frame.height / 2, 60, 60))
-//        menuTranform?.enable()
-//        menuTranform?.tapGestureHandle(usingBlock: {(isTap) -> Void in
-//            if isTap {
-////                self.rotateControl?.stop()
-//            }else{
-////                self.rotateControl?.start()
-//            }
-//        })
+        
 //        var object = PullToRefreshController()
 //        object.delegate = self
         
-        var heardView = UIView(frame:CGRectMake(0, 0, self.view.frame.size.width, 161))
-        self.tableView.tableHeaderView = heardView
-        
-        var lindeView = UIView(frame: CGRectMake(0, heardView.frame.height, self.view.frame.size.width, 1))
-        lindeView.backgroundColor = UIColor.grayColor()
-        heardView.addSubview(lindeView)
-        
-        var scrollView = UIScrollView(frame: CGRectMake(self.view.frame.origin.x + 10, 10, self.view.frame.size.width - 20, 150))
-        slideImage = SlideImage.attactToScrollView(scrollView,images: arrImages!,
-            tagetView: heardView,
-            backgroudScrollView: UIColor.grayColor(),
-            merging: true,
-            hidePageFooter: false)
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//        var heardView = UIView(frame:CGRectMake(0, 0, self.view.frame.size.width, 161))
+//        self.tableView.tableHeaderView = heardView
+//        
+//        var lindeView = UIView(frame: CGRectMake(0, heardView.frame.height, self.view.frame.size.width, 1))
+//        lindeView.backgroundColor = UIColor.grayColor()
+//        heardView.addSubview(lindeView)
+//        
+//        var scrollView = UIScrollView(frame: CGRectMake(self.view.frame.origin.x + 10, 10, self.view.frame.size.width - 20, 150))
+//        slideImage = SlideImage.attactToScrollView(scrollView,images: arrImages!,
+//            tagetView: heardView,
+//            backgroudScrollView: UIColor.grayColor(),
+//            merging: true,
+//            hidePageFooter: false)
 
-       
+       /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         
         // Using button code builder
         codeButton = UIButton(frame: CGRectMake(UIScreen.mainScreen().bounds.width - 40.0 - 20.0, UIScreen.mainScreen().bounds.height - 40.0 - 100, 40.0, 45.0))
@@ -98,6 +93,7 @@ class ViewController: UIViewController,UITableViewDataSource,UITableViewDelegate
 //        self.button.hidden = true
 //        self.button.addTarget(self, action: "Clicked", forControlEvents: UIControlEvents.TouchUpInside)
         effectButton = EffectButton.attactToTableView(self.tableView, buttonView: self.button,tagetView: self.view,styleView: Styles.Zoom)
+//        effectButton?.useOpporsite = true // use different point
         self.view.addSubview(effectButton!)
         effectButton?.onClickHandle(UsingBlock: {() -> Void in
             println("Yes")
@@ -106,20 +102,21 @@ class ViewController: UIViewController,UITableViewDataSource,UITableViewDelegate
         })
         
         /* Calling Loading */
-//        LoadingController.loadingView(self.view,loadType: LoadingType.Animation)
-//        let delay = 3.0 * Double(NSEC_PER_SEC)
-//        let time  = dispatch_time(DISPATCH_TIME_NOW, Int64(delay))
-//        dispatch_after(time, dispatch_get_main_queue()){
-//            LoadingController.removeLoadingView(self.view)
-//        }
+        LoadingController.loadingView(self.view,loadType: LoadingType.Style1)
+        let delay = 3.0 * Double(NSEC_PER_SEC)
+        let time  = dispatch_time(DISPATCH_TIME_NOW, Int64(delay))
+        dispatch_after(time, dispatch_get_main_queue()){
+            LoadingController.removeLoadingView(self.view)
+        }
         
-//        pullToRefresh = PullToRefreshController.attactToTableView(self.tableView,
-//            imagesArray: ["icon_refresh.png"],
-//            imageType: ImageType.SingleImage)
-
+        
+        /* PullToRefresh */
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         pullToRefresh = PullToRefreshController.attactToTableView(self.tableView,
-            imagesArray: ["load_01.png","load_02.png","load_03.png","load_04.png","load_05.png","load_06.png"],
-            imageType: ImageType.MultiImages)
+            imagesArray: ["icon_refresh.png"])
+
+//        pullToRefresh = PullToRefreshController.attactToTableView(self.tableView,
+//            imagesArray: ["load_01.png","load_02.png","load_03.png","load_04.png","load_05.png","load_06.png"])
         
         /* Calling push to refresh handle event */
         pullToRefresh!.refreshHandle(usingBlock: { () -> Void in
@@ -130,12 +127,20 @@ class ViewController: UIViewController,UITableViewDataSource,UITableViewDelegate
                 self.addItems()
             }
         })
-    
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        
+        /* Menu */
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        let menuButtons = [UIImage(named: "Invite.png")!,UIImage(named: "Leader.png")!,UIImage(named: "HowToPlay.png")!,UIImage(named: "Mail.png")!,UIImage(named: "NoSound.png")!,UIImage(named: "Shop.png")!]
+        let menuTitles  = ["Invite","Leader","Play","Mail","NoSound","Shop"]
+        
+        menuTranform = MenuTranform(size: self.view, frame: CGRectMake(2, self.view.frame.height / 2, 40, 40))
+        menuTranform?.addMenuItems(menuTitles, images: menuButtons)
+        menuTranform?.addGestureHandle(usingBlock: { (text, index) -> Void in
+            println("-->> Index: \(index) Name: \(text)")
+        })
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     }
-    
-//    func Clicked(){
-//        println("Yes")
-//    }
     
     //MARK: - ScrollViewDelegate
     func scrollViewDidScroll(scrollView: UIScrollView) {
@@ -184,6 +189,8 @@ class ViewController: UIViewController,UITableViewDataSource,UITableViewDelegate
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
+    
 
 
 }
